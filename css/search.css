@@ -53,11 +53,11 @@ section h3{
 	background-color: #F1F3F0;
 }
 .mui-table-view:before{
-	height: 0px!important;
+	height: 0!important;
 }
 .mui-table-view-cell{
-	padding:0.293333rem 0px!important;
+	padding:0.293333rem 0!important;
 }
 .mui-table-view-cell > a:not(.mui-btn){
-	margin:-0.293333rem 0px!important;
+	margin:-0.293333rem 0!important;
 }

@@ -24,12 +24,12 @@ section h1 {
 	background-color: #f2f2f0;
 }
 .mui-table-view-cell {
-	padding: 0.293333rem 0px;
+	padding: 0.293333rem 0;
 }
 
 .mui-table-view-cell > a:not(.mui-btn) {
-	margin: -0.293333rem 0px;
+	margin: -0.293333rem 0;
 }
 .mui-table-view-cell:before {
-	height: 0px;
+	height: 0;
 }
