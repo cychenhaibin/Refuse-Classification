@@ -1,0 +1,38 @@
+.mui-title {
+	text-align: left;
+}
+a,a:active {
+	color: #000;
+}
+.mui-bar {
+	background-color: #f2f2f0!important;
+}
+section h1 {
+	padding-top: 2rem;
+	padding-left: 0.533333rem;
+}
+.detail-title {
+	padding-top: 2.133333rem;
+	padding-buttom: 1.6rem;
+	text-align: center;
+}
+.detail-list {
+	padding: 0 0.533333rem;
+}
+.detail-list a {
+	font-size: 0.426666rem;
+	color: #8f8f94!important;
+}
+.mui-table-view {
+	background-color: #f2f2f0;
+}
+.mui-table-view-cell {
+	padding: 0.293333rem 0px;
+}
+
+.mui-table-view-cell > a:not(.mui-btn) {
+	margin: -0.293333rem 0px;
+}
+.mui-table-view-cell:before {
+	height: 0px;
+}

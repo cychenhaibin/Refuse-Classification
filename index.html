@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Refuse-Classification</title>
+    <link href="css/iconfont.css" rel="stylesheet"/>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/common.css" rel="stylesheet"/>
+	<link href="css/index.css" rel="stylesheet"/>
+</head>
+<body>
+	<header>
+		<h1>垃圾分类</h1>
+		<ul>
+			<li>
+				<i class="iconfont icon-huishouzhan"></i>
+				<span>回收站</span>
+			</li>
+			<li>
+				<i class="iconfont icon-lajizhan"></i>
+				<span>垃圾站</span>
+			</li>
+			<li id="class">
+				<i class="iconfont icon-fenlei"></i>
+				<span>垃圾分类</span>
+			</li>
+		</ul>
+	</header>
+	
+	<footer>
+		<i class="iconfont icon-shengboyuyinxiaoxi" id='speech'></i>
+		<ul>
+			<li>
+				<i class="iconfont icon-guanyu"></i>
+			</li>
+			<li>
+				<span>语音查找</span>
+			</li>
+			<li id="goSearch">
+				<i class="iconfont icon-ai219"></i>
+			</li>
+		</ul>
+	</footer>
+<script src="js/flexible.js"></script>
+<script src="js/mui.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function () {
+	//设置状态栏颜色
+    plus.navigator.setStatusBarBackground('#F2F2F0');
+	//触发语音识别
+	mui('footer').on('tap','#speech',function(){
+		//执行语音识别
+		fStartRecognize();
+	})
+	//封装语音识别函数
+	function fStartRecognize(){
+		const options = {
+			engine:'baidu',
+			punctuation:false
+		}
+		plus.speech.startRecognize( options, function(data){
+			mui.openWindow({
+				url:'detail.html',
+				id:'detail',
+				extras:{
+					title:encodeURI(data)
+				},
+				show:{
+				    autoShow:true
+				},
+				waiting:{
+					autoShow:true,
+					title:'正在加载...'
+				}
+			})
+		}, function(e){
+			mui.toast('语音识别失败',{ duration:'long', type:'div' })
+			console.log('语音识别失败：'+JSON.stringify(e));
+		});
+		setTimeout(fStopRecognize,10000);
+	}
+	//停止语音识别
+	function fStopRecognize(){
+		plus.speech.stopRecognize();
+	}
+	// 点击垃圾分类跳转
+	mui('header ul').on('tap','#class',function(){
+		mui.openWindow({
+			url:'class.html',
+			id:'class',
+			show:{
+			    autoShow:true
+			},
+			waiting:{
+				autoShow:true,
+				title:'正在加载...'
+			}
+		})
+	})
+	// 点击搜索按钮跳转
+	mui('footer ul').on('tap','#goSearch',function(){
+		mui.openWindow({
+			url:'search.html',
+			id:'search',
+			show:{
+			    autoShow:true
+			},
+			waiting:{
+				autoShow:true,
+				title:'正在加载...'
+			}
+		})
+	})
+	
+})
+</script>	
+</script>	
+</body>
+</html>

@@ -1,0 +1,62 @@
+header h1 {
+	padding-top: 1.875rem;
+	padding-left: 1.25rem;
+}
+header ul {
+	padding: 0.8rem 0.533333rem 0 0.533333rem;
+	display: flex;
+	justify-content: space-around;
+}
+header ul li {
+	display: flex;
+	flex-direction: column;
+	margin: 0.533333rem;
+	text-align: center;
+}
+header ul li i {
+	width: 1.866666rem;
+	height: 1.866666rem;
+	line-height: 1.866666rem;
+	font-size: 0.96rem!important;
+	background-color: #fff;
+	border-radius: 100%;
+	box-shadow: -0.053333rem -0.053333rem 0.266666rem #ccc;
+}
+header ul li span {
+	margin-top: 0.266666rem;
+	font-size: 0.426666rem;
+	font-weight: 500;
+}
+footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 2.133333rem;
+}
+footer > i {
+	position: absolute;
+	left: 50%;
+	top:-2.293333rem;
+	width: 1.76rem;
+	height: 1.76rem;
+	margin-left:-0.88rem;
+	font-size: 0.96rem!important;
+	line-height:1.76rem;
+	text-align: center;
+	background-color: #fff;
+	border-radius: 100%;
+	box-shadow: -0.053333rem -0.053333rem 0.266666rem #ccc;
+}
+footer ul {
+	list-style: none;
+	display: flex;
+	justify-content: space-around;
+}
+footer ul li i {
+	font-size: 0.74rem!important;
+	
+}
+footer ul li span {
+	font-size: 0.48rem;
+}

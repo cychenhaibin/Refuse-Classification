@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<link href="css/class.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="container">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">垃圾分类</h1>
+			</header>
+			<section>
+				<div class="mui-slider">
+				  <div class="mui-slider-group">
+				    <!--第一个内容区容器-->
+				    
+				  </div>
+				</div>
+				<div class="scroll-list">
+					<div class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<!--这里放置真实显示的DOM内容-->
+							<ul id="slideItem"></ul>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<script src="js/flexible.js"></script>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			
+			mui.plusReady(function(){
+				mui.ajax('http://apis.juhe.cn/rubbish/category',{
+					data:{
+						key:'dfe7a5dc90a9be32d35d15d5a06eb619',
+					},
+					success:function(data){
+						const result = data.result;
+						mui.each(result,function(index,item){
+							document.querySelector('.mui-slider-group').innerHTML += `
+								<div class="mui-slider-item">
+									<div>
+										<h3>${item.name}</h3>
+										<p>${item.explain}</p>
+									</div>
+								</div>`;
+						});
+						fAddList(result[0]);
+						// 渲染后无法滑动，是这个ui本身的bug，论坛出来的
+						mui('.mui-slider').slider().gotoItem(0);
+						console.log(JSON.stringify(data));
+						document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+							// event.detail.slideNumber获取滑块为第几个，对应显示滑块下的内容，开始下标为0
+							// https://mui.dcloud.net.cn/ui/#slide
+						    fAddList(result[event.detail.slideNumber]);
+						});
+					}
+				})
+				function fAddList(options){
+					let sHtml = '';
+					const aNewArr = options.common.split('、');
+					mui.each(aNewArr,function(index,item){
+						sHtml += `<li data-title='${item}'>${item}</li>`
+					})
+					document.querySelector('#slideItem').innerHTML = sHtml;
+				}
+				
+				// scroll滑动
+				mui('.mui-scroll-wrapper').scroll({
+					deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+				});
+				
+				// 点击跳转
+				mui('#slideItem').on('tap','li',function(){
+					const dataTitle = this.getAttribute('data-title');
+					mui.openWindow({
+						url:'detail.html',
+						id:'detail',
+						extras:{
+							title:encodeURI(dataTitle)
+						},
+						show:{
+						    autoShow:true
+						},
+						waiting:{
+							autoShow:true,
+							title:'正在加载...'
+						}
+					})
+				})
+			})
+			
+		</script>
+	</body>
+
+</html>

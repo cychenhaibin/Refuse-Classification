@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.css" rel="stylesheet"/>
+		<link href="css/common.css" rel="stylesheet"/>
+		<link href="css/detail.css" rel="stylesheet"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">垃圾分类</h1>
+		</header>
+		<section>
+			<h1>匹配结果</h1>
+			<div class="detail-title" id="detailTitle"></div>
+			<div class="detail-list">
+				<p>您可能要找的是</p>
+				<ul class="mui-table-view" id="detailList"></ul>
+			</div>
+		</section>
+	<script src="js/flexible.js"></script>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+		mui.plusReady(function(){
+			const self = plus.webview.currentWebview();
+			const title = decodeURI(self.title);
+			mui.ajax('http://apis.juhe.cn/rubbish/search',{
+				data:{
+					key:'dfe7a5dc90a9be32d35d15d5a06eb619',
+					q:title
+				},
+				success:function(data){
+					console.log(JSON.stringify(data))
+					const result = data.result;
+					if(!result){
+						mui('#detailTitle')[0].innerHTML = `
+							<p>正在查阅资料，请稍后查看</p>
+							<h3>未知垃圾</h3>`;
+						return false;
+					}
+					mui.each(result,function(index,item){
+						if(item.itemName == title){
+							mui('#detailTitle')[0].innerHTML = `
+								<p>${item.itemName}</p>
+								<h3>${item.itemCategory}</h3>`;
+						}else{
+							mui('#detailList')[0].innerHTML +=`
+								<li class="mui-table-view-cell">
+									<a class="mui-navigate-right">
+										<p>${item.itemName}</p>
+										<p>${item.itemCategory}</p>
+									</a>
+								</li>`;
+						}
+					})
+				}
+			})
+			
+		})
+	</script>
+	</body>
+</html>

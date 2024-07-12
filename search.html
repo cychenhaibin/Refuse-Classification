@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="css/mui.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/iconfont.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="css/search.css">
+</head>
+<body>
+	
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">垃圾分类</h1>
+</header>
+<section>
+	<h1>搜索匹配</h1>
+	<div class='search-input'>
+		<form action="" onsubmit="return false" id='formSearch'>
+			<input type="search" placeholder="请输入" autofocus="autofocus" id='searchInput'/>
+		</form>
+	</div>
+</section>
+<section class='search-list'>
+	<div class='hot-search'>
+		<h3>热门搜索</h3>
+		<ul id='hostSearch'></ul>
+	</div>
+	<div class='history-search'>
+		<h3>搜索历史</h3>
+		<ul class="mui-table-view" id='historyList'></ul>
+	</div>
+</section>
+	
+<script src="js/mui.js"></script>
+<script src='js/flexible.js'></script>
+<script type="text/javascript">
+mui.init();
+mui.plusReady(function(){
+	var storage = localStorage;
+	var sHtmlLi = '';
+	//一进入页面就需要执行本地存储的读取操作
+	fGetStorage();
+	//热门搜索
+	mui.ajax('http://apis.juhe.cn/rubbish/hotSearch',{
+		data:{
+			key:'dfe7a5dc90a9be32d35d15d5a06eb619'
+		},
+		success:function(data){
+			var result = data.result;
+			mui.each(result,function(index,item){
+				document.querySelector('#hostSearch').innerHTML += `
+					<li data-title='${item.itemName}'>${item.itemName}</li>
+				`
+			})
+		}
+	})
+	//点击热门搜索区块，跳转
+	mui("#hostSearch").on("tap",'li',function(){
+		var dataTitle = this.getAttribute('data-title');
+		//跳转页面
+		fOpenWindow(dataTitle);
+		//设置本地存储
+		fSetStorage(dataTitle);
+		//读取本地存储
+		fGetStorage();
+	})
+	//点击搜索
+	mui('.search-input').on('keypress','#formSearch',function(e){
+		var keyCode = e.keyCode;
+		var inputVal = document.querySelector('#searchInput').value;
+		if(  keyCode == 13 ){
+			//跳转页面
+			fOpenWindow(inputVal);
+			//设置本地存储
+			fSetStorage(inputVal);
+			//读取本地存储
+			fGetStorage();
+			//收起键盘
+			document.activeElement.blur();
+		}
+	})
+	//点击空白处，收起键盘
+	window.addEventListener('touchstart',function(){
+		document.activeElement.blur();
+	},false)
+	//封装跳转页面的函数
+	function fOpenWindow(val){
+		mui.openWindow({
+			url:'detail.html',
+			id:'detail',
+			extras:{
+				title:encodeURI(val)
+			},
+			show:{
+			    autoShow:true
+			},
+			waiting:{
+				autoShow:true,
+				title:'正在加载...'
+			}
+		})
+	};
+	//本地存储==》读取操作
+	function fGetStorage(){
+		sHtmlLi = '';
+		//如果没有key
+		if( !storage.getItem('historySearch') ){
+			//就设置一个
+			storage.setItem('historySearch','[]');
+		}
+		//如果有，获取到==》遍历==》渲染到页面上
+		var arr = JSON.parse( storage.getItem('historySearch') );
+		mui.each(arr,function(index,item){
+			sHtmlLi+=`
+				<li class="mui-table-view-cell" data-title='${item}'>
+					<a class="mui-navigate-right">
+						<p>
+							<i class='iconfont icon-shijian'></i>${item}
+						</p>
+					</a>
+				</li>
+			`;
+		})
+		document.querySelector('.mui-table-view').innerHTML = sHtmlLi;
+	}
+	//本地存储==》设置操作
+	function fSetStorage(val){
+		//获取到已经有的
+		var arr = JSON.parse( storage.getItem('historySearch') );
+		var arrFilter = arr.filter(function(item){
+			return item.indexOf(val) < 0;
+		})
+		arrFilter.unshift( val );
+		storage.setItem('historySearch',JSON.stringify(arrFilter));
+	};
+	//点击搜索历史，跳转
+	mui('#historyList').on('tap','li',function(){
+		var dataTitle = this.getAttribute('data-title');
+		//跳转页面
+		fOpenWindow(dataTitle);
+	})
+})
+</script>
+</body>
+
+</html>
